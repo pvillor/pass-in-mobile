@@ -7,13 +7,19 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { QRCode } from "./qrcode";
 
 type CredentialProps = {
   image?: string;
   onChangeAvatar?: () => void;
+  onExpandQRCode?: () => void;
 };
 
-export function Credential({ onChangeAvatar, image }: CredentialProps) {
+export function Credential({
+  onExpandQRCode,
+  onChangeAvatar,
+  image,
+}: CredentialProps) {
   return (
     <View className="w-full self-stretch items-center">
       <Image
@@ -35,15 +41,17 @@ export function Credential({ onChangeAvatar, image }: CredentialProps) {
         </ImageBackground>
 
         {image ? (
-          <Image
-            source={{ uri: image }}
-            className="size-36 rounded-full -mt-24"
-          />
+          <TouchableOpacity onPress={onChangeAvatar} activeOpacity={0.9}>
+            <Image
+              source={{ uri: image }}
+              className="size-36 rounded-full -mt-24"
+            />
+          </TouchableOpacity>
         ) : (
           <TouchableOpacity
             activeOpacity={0.9}
             className="size-36 rounded-full -mt-24 bg-gray-400 items-center justify-center"
-            onPressOut={onChangeAvatar}
+            onPress={onChangeAvatar}
           >
             <Feather name="camera" color={colors.green[400]} size={32} />
           </TouchableOpacity>
@@ -56,12 +64,14 @@ export function Credential({ onChangeAvatar, image }: CredentialProps) {
         <Text className="font-regular text-base text-zinc-300 mb-4">
           villo@kenzie.com
         </Text>
-        <Image
-          source={require("@/assets/ticket/qrcode.png")}
-          className="size-32"
-        />
 
-        <TouchableOpacity activeOpacity={0.7} className="mt-6">
+        <QRCode value={"testo"} size={120} />
+
+        <TouchableOpacity
+          activeOpacity={0.7}
+          className="mt-6"
+          onPress={onExpandQRCode}
+        >
           <Text className="font-body text-orange-500 text-sm">
             Ampliar QRCode
           </Text>
